@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  padding: 20px;
 }
 
 .App-logo {
@@ -35,4 +35,26 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.film input[type="checkbox"] {
+  display: none;
+}
+
+.film.checked {
+  background-color: #a0c4e8;
+  margin: 5px 0;
+}
+
+.film label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.film label a {
+  margin-left: 10px;
+  font-size: 20px;
+  color: black;
+  text-decoration: none;
 }
