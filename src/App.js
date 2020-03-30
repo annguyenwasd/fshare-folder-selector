@@ -140,6 +140,16 @@ function App() {
                 >
                   Fshare link
                 </a>
+                <a
+                  href={`https://www.youtube.com/results?search_query=${file.name
+                    .split(".")
+                    .join(" ")
+                    .substr(0, file.name.length / 2)} trailer`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Find trailer
+                </a>
               </label>
             </div>
           ))}
