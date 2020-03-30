@@ -104,9 +104,10 @@ function App() {
         >
           Get Links
         </button>
+        <br />
+        <br />
+        {copied && <div>Done!</div>}
       </div>
-      {copied && <div>Done!</div>}
-      <br />
       {listFiles &&
         listFiles
           .filter(
