@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { copyToClipboard } from "../utils";
+import React from "react";
 import script from "../script.json";
 
 function Code() {
-  const [copiedCode, setCopiedCode] = useState(false);
   return (
     <div>
       <h3>Purpose</h3>
