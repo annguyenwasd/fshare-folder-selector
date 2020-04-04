@@ -1,5 +1,5 @@
-import React from "react";
-import script from "../script.json";
+import React from 'react';
+import script from '../script.json';
 
 function Code() {
   return (
@@ -7,7 +7,7 @@ function Code() {
       <h3>Purpose</h3>
       <p>
         I use Fshare tool to download file <br />
-        Maximun Fshare allows 50 file per page. <strong>It's bad!!!</strong>
+        Maximum Fshare allows 50 file per page. <strong>It's bad!!!</strong>
         This tool allow you select all file in a folder
         <br />
         This example bellow has 442+ files from this link:
@@ -21,13 +21,9 @@ function Code() {
           &nbsp; to your browser (drag and drop to bookmark board)
         </li>
         <li>
-          Go to Fshare folder(eg:{" "}
+          Go to Fshare folder(eg: &nbsp;
           <strong>
-            <u>
-              {`
-          https://fshare.vn/<<Fshare folder code >>
-          `}
-            </u>
+            <u>{' https://fshare.vn/<<Fshare folder code >> '}</u>
           </strong>
           )
         </li>

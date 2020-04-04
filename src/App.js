@@ -1,23 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
-import "./App.css";
-import defaultFilms from "./default-films.json";
-import { copyToClipboard, getSize } from "./utils";
-import Code from "./components/code";
+import React, { useEffect, useState, useRef } from 'react';
+import './App.css';
+import defaultFilms from './default-films.json';
+import { copyToClipboard, getSize } from './utils';
+import Code from './components/code';
 
 function App() {
   const [listFiles, setListFiles] = useState(null);
-  const [files, setFiles] = useState([]);
-  const fileIds = useRef({});
-  const [search, setSearch] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const fileIds = useRef(new Set());
+  const [search, setSearch] = useState('');
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const list = JSON.parse(localStorage.getItem("list"));
+    const list = JSON.parse(localStorage.getItem('list'));
     if (list && list.length) {
       const newFiles = [];
       list.forEach(file => {
-        if (!fileIds.current[file.id]) {
-          fileIds.current[file.id] = 1;
+        if (!fileIds.current.has(file.id)) {
+          fileIds.current.add(file.id);
           newFiles.push(file);
         }
       });
@@ -32,16 +32,15 @@ function App() {
       className="App"
       onSubmit={e => {
         e.preventDefault();
-        const links = files
+        const links = selectedFiles
           .map(file => `https://fshare.vn/file/${file.linkcode}`)
-          .join(";");
+          .join(';');
         copyToClipboard(links);
         setCopied(true);
         setTimeout(() => {
           setCopied(false);
         }, 3000);
-      }}
-    >
+      }}>
       <h1>FShare Tool Link Selector</h1>
       <Code />
       <br />
@@ -52,20 +51,20 @@ function App() {
           type="file"
           onChange={e => {
             const blob = new Blob([e.target.files[0]], {
-              type: "application/json"
+              type: 'application/json'
             });
             blob.text().then(json => {
               const parsedData = JSON.parse(json);
               const temp = [];
               parsedData.forEach(file => {
-                if (!fileIds.current[file.id]) {
-                  fileIds.current[file.id] = 1;
+                if (!fileIds.current.has(file.id)) {
+                  fileIds.current.add(file.id);
                   temp.push(file);
                 }
               });
-              const newFiles = [...files, ...temp];
+              const newFiles = [...listFiles, ...temp].sort();
               setListFiles(newFiles);
-              localStorage.setItem("list", JSON.stringify(newFiles));
+              localStorage.setItem('list', JSON.stringify(newFiles));
             });
           }}
         />
@@ -78,10 +77,10 @@ function App() {
         </label>
         <br />
         <br />
-        {files && files.length > 0 && (
+        {selectedFiles && selectedFiles.length > 0 && (
           <>
-            <button type="button" onClick={() => setFiles([])}>
-              Remove {files.length} file(s) selected.{" "}
+            <button type="button" onClick={() => setSelectedFiles([])}>
+              Remove {selectedFiles.length} file(s) selected.{' '}
             </button>
           </>
         )}
@@ -90,45 +89,49 @@ function App() {
           type="button"
           onClick={() => {
             setListFiles([]);
-            localStorage.removeItem("list");
+            localStorage.removeItem('list');
           }}
-          title="Clear list bellow, default list will be loaded when you reload browser"
-        >
+          title="Clear list bellow, default list will be loaded when you reload browser">
           Clear
         </button>
         &nbsp;
         <button
-          disabled={!files.length}
+          disabled={!selectedFiles.length}
           type="submit"
-          title="Get links for FShare Tool"
-        >
+          title="Get links for FShare Tool">
           Get Links
         </button>
         <br />
         <br />
         {copied && <div>Done!</div>}
       </div>
+      <br />
+      {listFiles && <i>Total: {listFiles.length} files</i>}
+      <br />
       {listFiles &&
         listFiles
           .filter(
             file =>
               file.name.toLowerCase().indexOf(search) > -1 ||
-              files.includes(file)
+              selectedFiles.includes(file)
           )
           .map(file => (
             <div
               key={file.id}
-              className={files.includes(file) ? "film checked" : "film"}
-            >
+              className={
+                selectedFiles.includes(file) ? 'film checked' : 'film'
+              }>
               <label>
                 <input
                   type="checkbox"
-                  checked={files.includes(file)}
+                  checked={selectedFiles.includes(file)}
                   onChange={e => {
                     if (e.target.checked) {
-                      setFiles([...files, file]);
+                      setSelectedFiles([...selectedFiles, file]);
                     } else {
-                      setFiles(files.filter(f => f.id !== file.id));
+                      setSelectedFiles(
+                        selectedFiles.filter(f => f.id !== file.id)
+                      );
                     }
                   }}
                 />
@@ -137,18 +140,16 @@ function App() {
                 <a
                   href={`https://fshare.vn/file/${file.linkcode}`}
                   target="_blank"
-                  rel="noopener noreferrer"
-                >
+                  rel="noopener noreferrer">
                   Fshare link
                 </a>
                 <a
                   href={`https://www.youtube.com/results?search_query=${file.name
-                    .split(".")
-                    .join(" ")
+                    .split('.')
+                    .join(' ')
                     .substr(0, file.name.length / 2)} trailer`}
                   target="_blank"
-                  rel="noopener noreferrer"
-                >
+                  rel="noopener noreferrer">
                   Find trailer
                 </a>
               </label>
