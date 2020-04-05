@@ -1,9 +1,10 @@
 import React from 'react';
 import script from '../script.json';
 
-function Code() {
+function Intro() {
   return (
     <div>
+      <h1>FShare Tool Link Selector</h1>
       <h3>Purpose</h3>
       <p>
         I use Fshare tool to download file <br />
@@ -46,4 +47,4 @@ function Code() {
   );
 }
 
-export default Code;
+export default Intro;

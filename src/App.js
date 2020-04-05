@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './App.css';
-import defaultFilms from './default-films.json';
-import { copyToClipboard, getSize } from './utils';
-import Code from './components/code';
+import 'App.css';
+import defaultFilms from 'default-films.json';
+import { copyToClipboard } from 'utils';
+import Intro from 'components/intro';
+import File from 'components/file';
 
 function App() {
   const [listFiles, setListFiles] = useState(null);
@@ -41,8 +42,7 @@ function App() {
           setCopied(false);
         }, 3000);
       }}>
-      <h1>FShare Tool Link Selector</h1>
-      <Code />
+      <Intro />
       <br />
       <br />
       <label>
@@ -69,6 +69,7 @@ function App() {
           }}
         />
       </label>
+
       <div className="sticky">
         <br />
         <label>
@@ -108,6 +109,7 @@ function App() {
       <br />
       {listFiles && <i>Total: {listFiles.length} files</i>}
       <br />
+
       {listFiles &&
         listFiles
           .filter(
@@ -116,44 +118,19 @@ function App() {
               selectedFiles.includes(file)
           )
           .map(file => (
-            <div
+            <File
               key={file.id}
-              className={
-                selectedFiles.includes(file) ? 'film checked' : 'film'
-              }>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedFiles.includes(file)}
-                  onChange={e => {
-                    if (e.target.checked) {
-                      setSelectedFiles([...selectedFiles, file]);
-                    } else {
-                      setSelectedFiles(
-                        selectedFiles.filter(f => f.id !== file.id)
-                      );
-                    }
-                  }}
-                />
-                &nbsp;
-                {file.name} - {getSize(file.size)}
-                <a
-                  href={`https://fshare.vn/file/${file.linkcode}`}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Fshare link
-                </a>
-                <a
-                  href={`https://www.youtube.com/results?search_query=${file.name
-                    .split('.')
-                    .join(' ')
-                    .substr(0, file.name.length / 2)} trailer`}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Find trailer
-                </a>
-              </label>
-            </div>
+              checked={selectedFiles.includes(file)}
+              file={file}
+              className={selectedFiles.includes(file) ? 'film checked' : 'film'}
+              onChange={e => {
+                if (e.target.checked) {
+                  setSelectedFiles([...selectedFiles, file]);
+                } else {
+                  setSelectedFiles(selectedFiles.filter(f => f.id !== file.id));
+                }
+              }}
+            />
           ))}
     </form>
   );
